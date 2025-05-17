@@ -8,7 +8,10 @@ import { createSelector } from 'reselect';
 import { Spacer } from '@freecodecamp/ui';
 
 import { challengeTypes } from '../../../../../shared/config/challenge-types';
-import { SuperBlocks } from '../../../../../shared/config/curriculum';
+import {
+  chapterBasedSuperBlocks,
+  SuperBlocks
+} from '../../../../../shared/config/curriculum';
 import envData from '../../../../config/env.json';
 import { isAuditedSuperBlock } from '../../../../../shared/utils/is-audited';
 import Caret from '../../../assets/icons/caret';
@@ -188,10 +191,7 @@ class Block extends Component<BlockProps> {
             </div>
             <div className='map-title-completed course-title'>
               <CheckMark isCompleted={isBlockCompleted} />
-              <span
-                aria-hidden='true'
-                className='map-completed-count'
-              >{`${completedCount}/${challenges.length}`}</span>
+              <span aria-hidden='true'>{`${completedCount}/${challenges.length}`}</span>
               <span className='sr-only'>
                 ,{' '}
                 {t('learn.challenges-completed', {
@@ -407,7 +407,7 @@ class Block extends Component<BlockProps> {
       !isEmptyBlock && (
         <>
           {layoutToComponent[blockLayout]}
-          {superBlock !== SuperBlocks.FullStackDeveloper && (
+          {!chapterBasedSuperBlocks.includes(superBlock) && (
             <Spacer size='xs' />
           )}
         </>
