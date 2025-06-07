@@ -104,7 +104,10 @@ export const buildFunctions = {
   [challengeTypes.python]: buildPythonChallenge,
   [challengeTypes.multifilePythonCertProject]: buildPythonChallenge,
   [challengeTypes.lab]: buildDOMChallenge,
-  [challengeTypes.jsLab]: buildJSChallenge
+  [challengeTypes.jsLab]: buildJSChallenge,
+  [challengeTypes.pyLab]: buildPythonChallenge,
+  [challengeTypes.dailyChallengeJs]: buildJSChallenge,
+  [challengeTypes.dailyChallengePy]: buildPythonChallenge
 };
 
 export function canBuildChallenge(challengeData: BuildChallengeData): boolean {
@@ -132,7 +135,10 @@ const testRunners = {
   [challengeTypes.python]: getPyTestRunner,
   [challengeTypes.multifileCertProject]: getDOMTestRunner,
   [challengeTypes.multifilePythonCertProject]: getPyTestRunner,
-  [challengeTypes.lab]: getDOMTestRunner
+  [challengeTypes.lab]: getDOMTestRunner,
+  [challengeTypes.pyLab]: getPyTestRunner,
+  [challengeTypes.dailyChallengeJs]: getJSTestRunner,
+  [challengeTypes.dailyChallengePy]: getPyTestRunner
 };
 
 export function getTestRunner(
@@ -400,7 +406,9 @@ export function challengeHasPreview({
     challengeType === challengeTypes.multifileCertProject ||
     challengeType === challengeTypes.multifilePythonCertProject ||
     challengeType === challengeTypes.python ||
-    challengeType === challengeTypes.lab
+    challengeType === challengeTypes.lab ||
+    challengeType === challengeTypes.pyLab ||
+    challengeType === challengeTypes.dailyChallengePy
   );
 }
 
@@ -412,6 +420,7 @@ export function isJavaScriptChallenge({
   return (
     challengeType === challengeTypes.js ||
     challengeType === challengeTypes.jsProject ||
-    challengeType === challengeTypes.jsLab
+    challengeType === challengeTypes.jsLab ||
+    challengeType === challengeTypes.dailyChallengeJs
   );
 }
