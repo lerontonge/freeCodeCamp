@@ -90,5 +90,21 @@ export const superBlockList = [
   {
     name: 'Certified Full Stack Developer',
     path: '25-front-end-development'
+  },
+  {
+    name: 'A2 Professional Spanish (Beta)',
+    path: '26-a2-professional-spanish'
+  },
+  {
+    name: 'A2 Professional Chinese (Beta)',
+    path: '27-a2-professional-chinese'
+  },
+  {
+    name: 'Basic HTML',
+    path: '28-basic-html'
+  },
+  {
+    name: 'Semantic HTML',
+    path: '29-semantic-html'
   }
 ];
