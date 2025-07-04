@@ -50,6 +50,11 @@ const generic = path.resolve(
   '../../src/templates/Challenges/generic/show.tsx'
 );
 
+const examDownload = path.resolve(
+  __dirname,
+  '../../src/templates/Challenges/exam-download/show.tsx'
+);
+
 const views = {
   backend,
   classic,
@@ -60,7 +65,8 @@ const views = {
   exam,
   msTrophy,
   fillInTheBlank,
-  generic
+  generic,
+  examDownload
 };
 
 function getIsFirstStepInBlock(id, edges) {
@@ -86,6 +92,8 @@ exports.createChallengePages = function (
       disableLoopProtectPreview,
       certification,
       superBlock,
+      chapter,
+      module,
       block,
       fields: { slug, blockHashSlug },
       required = [],
@@ -108,6 +116,8 @@ exports.createChallengePages = function (
           disableLoopProtectTests,
           disableLoopProtectPreview,
           superBlock,
+          chapter,
+          module,
           block,
           isFirstStep: getIsFirstStepInBlock(index, allChallengeEdges),
           template,
