@@ -20,6 +20,7 @@ import type {
   ChallengeFiles,
   ChallengeMeta,
   ChallengeNode,
+  Hooks,
   ResizeProps,
   SavedChallenge,
   SavedChallengeFiles,
@@ -76,7 +77,7 @@ import '../components/test-frame.css';
 
 const mapStateToProps = (state: unknown) => ({
   challengeFiles: challengeFilesSelector(state) as ChallengeFiles,
-  output: consoleOutputSelector(state) as string[],
+  output: consoleOutputSelector(state) as string,
   isChallengeCompleted: isChallengeCompletedSelector(state) as boolean,
   savedChallenges: savedChallengesSelector(state) as SavedChallenge[]
 });
@@ -110,10 +111,10 @@ interface ShowClassicProps extends Pick<PreviewProps, 'previewMounted'> {
   challengeFiles: ChallengeFiles;
   initConsole: (arg0: string) => void;
   initTests: (tests: Test[]) => void;
-  initHooks: (hooks?: { beforeAll: string }) => void;
+  initHooks: (hooks?: Hooks) => void;
   initVisibleEditors: () => void;
   isChallengeCompleted: boolean;
-  output: string[];
+  output: string;
   pageContext: {
     challengeMeta: ChallengeMeta;
     projectPreview: {
@@ -172,7 +173,9 @@ const StepPreview = ({
   dimensions?: { width: number; height: number };
 }) => {
   return challengeType === challengeTypes.python ||
-    challengeType === challengeTypes.multifilePythonCertProject ? (
+    challengeType === challengeTypes.multifilePythonCertProject ||
+    challengeType === challengeTypes.pyLab ||
+    challengeType === challengeTypes.dailyChallengePy ? (
     <XtermTerminal dimensions={dimensions} xtermFitRef={xtermFitRef} />
   ) : (
     <Preview disableIframe={disableIframe} previewMounted={previewMounted} />
@@ -304,6 +307,12 @@ function ShowClassic({
 
   // AB testing Pre-fetch in the Spanish locale
   const isPreFetchEnabled = useFeature('prefetch_ab_test').on;
+  const isIndependentLowerJawEnabled = useFeature('independent-lower-jaw').on;
+
+  // Independent lower jaw is only enabled for the urriculum outline workshop
+  const showIndependentLowerJaw =
+    blockName === 'workshop-curriculum-outline' && isIndependentLowerJawEnabled;
+
   useEffect(() => {
     if (isPreFetchEnabled && envData.clientLocale === 'espanol') {
       preloadPage(nextChallengePath);
@@ -414,6 +423,7 @@ function ShowClassic({
         instructionsPanelRef={instructionsPanelRef}
         toolPanel={toolPanel}
         hasDemo={hasDemo}
+        showIndependentLowerJaw={showIndependentLowerJaw}
       />
     );
   };
@@ -438,6 +448,7 @@ function ShowClassic({
           title={title}
           usesMultifileEditor={usesMultifileEditor}
           showProjectPreview={demoType === 'onLoad'}
+          showIndependentLowerJaw={showIndependentLowerJaw}
         />
       )
     );
@@ -519,6 +530,7 @@ function ShowClassic({
             }
             windowTitle={windowTitle}
             startWithConsoleShown={openConsole}
+            showIndependentLowerJaw={showIndependentLowerJaw}
           />
         )}
         <CompletionModal />
@@ -568,6 +580,8 @@ export const query = graphql`
         forumTopicId
         hooks {
           beforeAll
+          beforeEach
+          afterEach
         }
         fields {
           blockName
